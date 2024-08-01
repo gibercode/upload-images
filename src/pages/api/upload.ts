@@ -1,19 +1,19 @@
 import { put } from "@vercel/blob";
-import { NextResponse } from "next/server";
+import type { NextApiResponse, NextApiRequest, PageConfig } from "next";
 
-export async function POST(request: any): Promise<NextResponse> {
-  const { searchParams } = new URL(request.url);
-  const filename = searchParams.get("filename");
-
-  // ⚠️ The below code is for App Router Route Handlers only
-  const blob = await put(filename || "", request.body, {
+export default async function handler(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
+  const blob = await put(request.query.filename as string, request, {
     access: "public",
   });
 
-  // Here's the code for Pages API Routes:
-  // const blob = await put(filename, request, {
-  //   access: 'public',
-  // });
-
-  return NextResponse.json(blob);
+  return response.status(200).json(blob);
 }
+
+export const config: PageConfig = {
+  api: {
+    bodyParser: false,
+  },
+};
