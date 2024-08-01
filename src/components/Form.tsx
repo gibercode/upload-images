@@ -3,7 +3,6 @@ import { Button, Spinner } from "@radix-ui/themes";
 import { useFileStore } from "@/stores/files";
 import { Toast } from "./Toast";
 import { useUiStore } from "@/stores/ui";
-useUiStore;
 
 export const Form = () => {
   const { setLoading, loading } = useUiStore();
