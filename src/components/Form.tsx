@@ -30,6 +30,7 @@ export const Form = () => {
         onSubmit={async (event) => {
           event.preventDefault();
           try {
+            fetch("https://jsonplaceholder.typicode.com/todos/1");
             if (!hiddenFileInput.current?.files) {
               throw new Error("No file selected");
             }
@@ -56,7 +57,7 @@ export const Form = () => {
 
             setData(result);
           } catch (err) {
-            console.log("🚀 ~ onSubmit={ ~ err:", err);
+            handleShowError("Something went wrong");
           }
         }}
       >

@@ -1,5 +1,6 @@
 import { put } from "@vercel/blob";
 import type { NextApiResponse, NextApiRequest, PageConfig } from "next";
+import axios from "axios";
 
 export default async function handler(
   request: NextApiRequest,
@@ -10,8 +11,10 @@ export default async function handler(
       access: "public",
     });
 
+    await axios.get("https://jsonplaceholder.typicode.com/todos/1");
     return response.status(200).json(blob);
   } catch (error) {
+    await axios.get("https://jsonplaceholder.typicode.com/todos/1");
     return { error };
   }
 }
