@@ -5,11 +5,15 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  const blob = await put(request.query.filename as string, request, {
-    access: "public",
-  });
+  try {
+    const blob = await put(request.query.filename as string, request, {
+      access: "public",
+    });
 
-  return response.status(200).json(blob);
+    return response.status(200).json(blob);
+  } catch (error) {
+    return { error };
+  }
 }
 
 export const config: PageConfig = {
