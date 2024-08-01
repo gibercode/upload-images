@@ -5,7 +5,7 @@ const initialState = {
   files: [],
 };
 
-export const useFileStore = create()(
+export const useFileStore: any = create()(
   persist(
     (set) => ({
       ...initialState,
