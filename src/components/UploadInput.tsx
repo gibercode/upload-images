@@ -1,4 +1,3 @@
-"use client";
 import type { PutBlobResult } from "@vercel/blob";
 import { useRef, ChangeEvent, useState } from "react";
 import { Button } from "@radix-ui/themes";
@@ -34,7 +33,6 @@ export const UploadInput = () => {
             });
 
             const newBlob = (await response.json()) as any;
-            console.log("🚀 ~ onSubmit={ ~ newBlob:", newBlob);
             if (newBlob) setBlob(newBlob);
           } catch (err) {
             console.log("🚀 ~ onSubmit={ ~ err:", err);
