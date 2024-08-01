@@ -4,7 +4,7 @@ import { useRef, ChangeEvent, useState } from "react";
 import { Button } from "@radix-ui/themes";
 
 export const UploadInput = () => {
-  const [blob, setBlob] = useState(null);
+  const [blob, setBlob] = useState<any>(null);
   const hiddenFileInput: any = useRef();
 
   const handleUpload = () => {
@@ -27,17 +27,15 @@ export const UploadInput = () => {
             }
 
             const file = hiddenFileInput.current.files[0];
-            const fileCopy = { ...file };
 
-            const response = await fetch(`/api/upload?filename=${file?.name}`, {
+            const response = await fetch(`a/upload?filename=${file?.name}`, {
               method: "POST",
-              body: fileCopy,
+              body: file,
             });
 
-            console.log("🚀 ~ onSubmit={ ~ response:", response?.body);
-
-            // const newBlob = (await response.json()) as any;
-            // if (newBlob) setBlob(newBlob);
+            const newBlob = (await response.json()) as any;
+            console.log("🚀 ~ onSubmit={ ~ newBlob:", newBlob);
+            if (newBlob) setBlob(newBlob);
           } catch (err) {
             console.log("🚀 ~ onSubmit={ ~ err:", err);
           }
@@ -68,6 +66,7 @@ export const UploadInput = () => {
           Submit
         </Button>
       </form>
+      <h1 style={{ color: "white" }}>{blob?.url}</h1>
     </>
   );
 };
