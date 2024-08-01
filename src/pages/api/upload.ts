@@ -11,10 +11,10 @@ export default async function handler(
       access: "public",
     });
 
-    // await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+    await axios.get("https://jsonplaceholder.typicode.com/todos/1");
     return response.status(200).json(blob);
   } catch (error) {
-    // await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+    await axios.get("https://jsonplaceholder.typicode.com/todos/1");
     return { error };
   }
 }
