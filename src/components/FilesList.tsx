@@ -7,7 +7,7 @@ import { handleDownload } from "@/utils";
 
 export const FilesList = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { files, setData } = useFileStore();
+  const { files, setData }: any = useFileStore();
 
   const handleDelete = (index: number) => {
     const filesCopy = [...files];

@@ -6,7 +6,7 @@ import { Toast } from "./Toast";
 export const Form = () => {
   const [error, setError] = useState({ show: false, message: "" });
   const hiddenFileInput = useRef<HTMLInputElement | null>(null);
-  const { setData } = useFileStore();
+  const { setData }: any = useFileStore();
   const maxSize = 5 * 1024 * 1024;
 
   const handleShowError = (message: string) => {
