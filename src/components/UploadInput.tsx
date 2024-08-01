@@ -27,8 +27,8 @@ export const UploadInput = () => {
 
             const file = hiddenFileInput.current.files[0];
 
-            const response = await fetch(`a/upload?filename=${file?.name}`, {
-              method: "PUT",
+            const response = await fetch(`api/upload?filename=${file?.name}`, {
+              method: "POST",
               body: file,
             });
 
