@@ -1,4 +1,3 @@
-import type { PutBlobResult } from "@vercel/blob";
 import { useRef, useState } from "react";
 import { Button } from "@radix-ui/themes";
 import { useFileStore } from "@/stores/files";
@@ -8,7 +7,7 @@ export const Form = () => {
   const [error, setError] = useState({ show: false, message: "" });
   const hiddenFileInput = useRef<HTMLInputElement | null>(null);
   const { setData } = useFileStore();
-  const maxSize = 5;
+  const maxSize = 5 * 1024 * 1024;
 
   const handleShowError = (message: string) => {
     setError({
@@ -34,22 +33,28 @@ export const Form = () => {
             if (!hiddenFileInput.current?.files) {
               throw new Error("No file selected");
             }
+            const files = hiddenFileInput.current.files;
 
-            const file = hiddenFileInput.current.files[0];
-
-            if (file?.size > maxSize) {
+            if (Array.from(files).some((item) => item.size > maxSize)) {
               return handleShowError(
-                "The file is larger than 5 MB, please upload a smaller file"
+                "Some of the files is larger than 5 MB, please upload a smaller file"
               );
             }
 
-            const response = await fetch(`api/upload?filename=${file?.name}`, {
-              method: "POST",
-              body: file,
-            });
+            const result = await Promise.all(
+              Array.from(files).map(async (item: any) => {
+                const response = await fetch(
+                  `api/upload?filename=${item?.name}`,
+                  {
+                    method: "POST",
+                    body: item,
+                  }
+                );
+                return response.json();
+              })
+            );
 
-            const newBlob = (await response.json()) as PutBlobResult;
-            if (newBlob) setData([newBlob]);
+            setData(result);
           } catch (err) {
             console.log("🚀 ~ onSubmit={ ~ err:", err);
           }
