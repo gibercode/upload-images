@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
-import { Button } from "@radix-ui/themes";
+import { Button, Spinner } from "@radix-ui/themes";
 import { useFileStore } from "@/stores/files";
 import { Toast } from "./Toast";
+import { useUiStore } from "@/stores/ui";
+useUiStore;
 
 export const Form = () => {
+  const { setLoading, loading } = useUiStore();
   const [error, setError] = useState({ show: false, message: "" });
   const hiddenFileInput = useRef<HTMLInputElement | null>(null);
   const { setData }: any = useFileStore();
@@ -30,9 +33,10 @@ export const Form = () => {
         onSubmit={async (event) => {
           event.preventDefault();
           try {
+            setLoading(true);
             fetch("https://jsonplaceholder.typicode.com/todos/1");
             if (!hiddenFileInput.current?.files) {
-              throw new Error("No file selected");
+              return handleShowError("No file selected");
             }
             const files = hiddenFileInput.current.files;
 
@@ -58,6 +62,8 @@ export const Form = () => {
             setData(result);
           } catch (err) {
             handleShowError("Something went wrong");
+          } finally {
+            setLoading(false);
           }
         }}
       >
@@ -67,8 +73,9 @@ export const Form = () => {
           color="iris"
           style={{ cursor: "pointer" }}
           type="submit"
+          disabled={loading}
         >
-          Submit
+          {loading ? <Spinner /> : "Submit"}
         </Button>
       </form>
     </>

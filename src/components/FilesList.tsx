@@ -1,13 +1,23 @@
 import { useState } from "react";
-import { Flex, Text, Card, RadioCards, Box, Button } from "@radix-ui/themes";
+import {
+  Flex,
+  Text,
+  Card,
+  RadioCards,
+  Box,
+  Button,
+  Skeleton,
+} from "@radix-ui/themes";
 import { useFileStore } from "@/stores/files";
 import { EditDialog } from "./EditDialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { handleDownload } from "@/utils";
+import { useUiStore } from "@/stores/ui";
 
 export const FilesList = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const { files, setData } = useFileStore();
+  const { loading } = useUiStore();
 
   const handleDelete = (index: number) => {
     const filesCopy = [...files];
@@ -17,8 +27,14 @@ export const FilesList = () => {
 
   return (
     <>
-      <Card style={{ marginTop: "20px", width: "30rem" }}>
-        {files?.length ? (
+      <Card
+        style={{
+          marginTop: "20px",
+          width: "30rem",
+          overflowY: "scroll",
+        }}
+      >
+        {files?.length && !loading ? (
           <RadioCards.Root defaultValue="1" columns={{ initial: "3", sm: "1" }}>
             {files.map((item: Record<string, string>, index: number) => {
               return (
@@ -67,6 +83,12 @@ export const FilesList = () => {
               );
             })}
           </RadioCards.Root>
+        ) : loading ? (
+          <>
+            <Skeleton height="4.375rem" />
+            <Skeleton height="4.375rem" mt="10px" />
+            <Skeleton height="4.375rem" mt="10px" />
+          </>
         ) : (
           <Flex justify="center" align="center">
             <Text>Upload a file</Text>
