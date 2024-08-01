@@ -1,25 +1,21 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { PutBlobResult } from "@vercel/blob";
+import { put } from "@vercel/blob";
+import { NextResponse } from "next/server";
 
-const upload = async (req: NextApiRequest, res: NextApiResponse) => {
-  const file = req.body;
-  const filename = req.query.filename;
+export async function POST(request: Request): Promise<NextResponse> {
+  console.log("🚀 ~ POST ~ request:", request);
+  const { searchParams } = new URL(request.url);
+  const filename = searchParams.get("filename");
+  console.log("🚀 ~ POST ~ filename:", filename);
 
-  const response = await fetch(
-    `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/blob`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": file.type,
-        Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
-      },
-      body: file,
-    }
-  );
+  // ⚠️ The below code is for App Router Route Handlers only
+  const blob = await put(filename || "", request.body, {
+    access: "public",
+  });
 
-  const newBlob: PutBlobResult = await response.json();
+  // Here's the code for Pages API Routes:
+  // const blob = await put(filename, request, {
+  //   access: "public",
+  // });
 
-  res.status(201).json(newBlob);
-};
-
-export default upload;
+  return NextResponse.json(blob);
+}
